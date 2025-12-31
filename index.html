@@ -75,37 +75,42 @@
         </section>
 
         <!-- Roleta -->
-       <section id="roleta" class="tela" style="display:none;">
-          <h3>🎡 Roleta Virtual</h3>
-        
-          <!-- Área de apostas -->
-          <div id="roleta-apostas">
-            <h4>Escolha sua aposta:</h4>
-            <div id="apostas-cor">
-              <button data-aposta="vermelho" class="aposta-btn" style="background:red; color:white;">Vermelho</button>
-              <button data-aposta="preto" class="aposta-btn" style="background:black; color:white;">Preto</button>
-              <button data-aposta="verde" class="aposta-btn" style="background:green; color:white;">Verde 0</button>
-            </div>
-            <div id="apostas-numero" style="display:flex; flex-wrap: wrap; max-width: 360px; margin-top:10px;">
-              <!-- Botões de números 0 a 36 -->
-              <script>
-                for(let i=0;i<=36;i++){
-                  document.write(`<button class="numero-btn" data-aposta="${i}">${i}</button>`);
-                }
-              </script>
-            </div>
-          </div>
-        
-          <!-- Roleta visual -->
-          <div id="roleta-visual" style="position:relative; width:300px; height:300px; margin:20px auto;">
-            <canvas id="canvas-roleta" width="300" height="300"></canvas>
-            <div id="bola" style="position:absolute; width:15px; height:15px; border-radius:50%; background:white; top:10px; left:142px; z-index:10;"></div>
-          </div>
-        
-          <button id="roleta-spin">Girar Roleta</button>
-          <div id="roleta-resultado" style="margin-top:10px; font-weight:bold;"></div>
-        </section>
+        <section id="roleta" class="tela" style="display:none;">
+            <h3>🎡 Roleta Virtual</h3>
 
+            <div id="container">
+                <div id="notification">
+                    <span class="nSpan">Escolha sua aposta!</span>
+                    <button class="nBtn" onclick="this.parentElement.style.display='none'">Ok</button>
+                </div>
+
+                <div id="betting_board">
+                    <div class="bbtop">
+                        <div class="bbtoptwo">Vermelho</div>
+                        <div class="bbtoptwo">Preto</div>
+                    </div>
+
+                    <div class="number_board">
+                        <div class="number_block number_0"><span class="nbn">0</span></div>
+                        <!-- Números 1-36 serão gerados via JS -->
+                    </div>
+
+                    <div class="bo3_board">
+                        <div class="bo3_block">1ª Duzia</div>
+                        <div class="bo3_block">2ª Duzia</div>
+                        <div class="bo3_block">3ª Duzia</div>
+                    </div>
+
+                    <div class="oto_board">
+                        <div class="oto_block">1-18</div>
+                        <div class="oto_block">Par/Ímpar</div>
+                        <div class="oto_block">19-36</div>
+                    </div>
+                </div>
+
+                <button class="spinBtn" id="roleta-spin">Spin</button>
+            </div>
+        </section>
 
         <!-- Crash Game -->
         <section id="crash" class="tela" style="display:none;">
