@@ -3,19 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>Meu Casino</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        input { margin: 5px 0; padding: 5px; }
-        button { margin: 5px 0; padding: 5px 10px; }
-        #historico { list-style-type: none; padding-left: 0; }
-        #historico li { margin-bottom: 3px; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #3a3a5c);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #ffd700;
+            text-shadow: 2px 2px #000;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: none;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff6b6b;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff4757;
+            transform: scale(1.05);
+        }
+
+        #user-info, #auth-container {
+            background-color: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        #saldo {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #00ff99;
+        }
+
+        #resultado {
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+
+        #historico {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        #historico li {
+            background-color: rgba(255,255,255,0.1);
+            margin-bottom: 3px;
+            padding: 5px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <h1>Bem-vindo ao Meu Casino!</h1>
+    <h1>🎰 Meu Casino 🎰</h1>
 
-    <!-- Formulário de login/registro -->
+    <!-- Login / Registro -->
     <div id="auth-container">
         <input type="email" id="email" placeholder="Email"><br>
         <input type="password" id="senha" placeholder="Senha"><br>
@@ -23,7 +92,7 @@
         <button id="btn-login">Login</button>
     </div>
 
-    <!-- Informações do jogador -->
+    <!-- Área do jogador -->
     <div id="user-info" style="display:none;">
         <div id="saldo">Saldo: 0 coins</div>
         <button id="apostar">Apostar 100 coins</button>
@@ -33,7 +102,6 @@
         <button id="btn-logout">Logout</button>
     </div>
 
-    <!-- Firebase e lógica JS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -52,7 +120,6 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // --- Funções Firestore ---
         async function criarDocumentoUsuario(uid) {
             await setDoc(doc(db, "users", uid), { saldo: 1000 });
         }
@@ -61,8 +128,7 @@
             const docRef = doc(db, "users", uid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                const saldo = docSnap.data().saldo;
-                document.getElementById("saldo").textContent = `Saldo: ${saldo} coins`;
+                document.getElementById("saldo").textContent = `Saldo: ${docSnap.data().saldo} coins`;
             } else {
                 await criarDocumentoUsuario(uid);
                 document.getElementById("saldo").textContent = `Saldo: 1000 coins`;
@@ -75,7 +141,6 @@
             document.getElementById("saldo").textContent = `Saldo: ${novoSaldo} coins`;
         }
 
-        // Histórico de apostas
         async function adicionarAposta(uid, valor, resultado) {
             await addDoc(collection(db, "users", uid, "historico"), {
                 valor: valor,
@@ -98,7 +163,6 @@
             });
         }
 
-        // --- Autenticação ---
         const emailInput = document.getElementById("email");
         const senhaInput = document.getElementById("senha");
         const btnRegistrar = document.getElementById("btn-registrar");
@@ -147,7 +211,6 @@
             }
         });
 
-        // --- Apostar ---
         btnApostar.addEventListener("click", async () => {
             const user = auth.currentUser;
             if (!user) return alert("Você precisa estar logado para apostar!");
@@ -166,7 +229,7 @@
                 await atualizarSaldo(user.uid, saldo);
                 await adicionarAposta(user.uid, 100, ganhou ? "Ganhou" : "Perdeu");
 
-                document.getElementById("resultado").textContent = ganhou ? "Você ganhou!" : "Você perdeu!";
+                document.getElementById("resultado").textContent = ganhou ? "🎉 Você ganhou!" : "💔 Você perdeu!";
             } catch (error) {
                 console.error(error);
                 alert("Erro ao apostar: " + error.message);
