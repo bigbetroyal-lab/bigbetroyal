@@ -42,3 +42,7 @@ document.querySelectorAll(".spin-btn").forEach(btn => {
     });
 });
 
+import { atualizarRanking } from "./ui.js";
+
+// Depois de addSaldo ou gastarSaldo
+atualizarRanking();
