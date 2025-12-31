@@ -42,7 +42,30 @@
 
 <div id="slot-resultado"></div>
 </section>
-        <section id="roleta" class="tela" style="display:none;">Aqui vai a Roleta</section>
+        <section id="roleta" class="tela" style="display:none;"><h3>🎡 Roleta Virtual</h3>
+
+<div style="margin: 10px 0;">
+    <label>Aposta (coins): </label>
+    <input type="number" id="roleta-aposta" value="50" min="10">
+</div>
+
+<div style="margin: 10px 0;">
+    <label>Escolha:</label>
+    <select id="roleta-tipo">
+        <option value="cor">Cor</option>
+        <option value="numero">Número</option>
+    </select>
+</div>
+
+<div style="margin: 10px 0;" id="numero-container" style="display:none;">
+    <label>Número (0-36): </label>
+    <input type="number" id="roleta-numero" min="0" max="36" value="7">
+</div>
+
+<button id="roleta-spin">Girar Roleta</button>
+
+<div id="roleta-resultado" style="margin-top:10px; font-weight:bold;"></div>
+</section>
         <section id="crash" class="tela" style="display:none;">Aqui vai o Crash Game</section>
         <section id="ranking" class="tela" style="display:none;">Leaderboard</section>
         <section id="historico" class="tela" style="display:none;">Histórico de apostas</section>
