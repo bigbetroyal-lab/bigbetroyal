@@ -173,3 +173,43 @@ document.querySelectorAll('#historico button[data-filter]').forEach(btn => {
     });
 });
 
+// ===============================
+// RANKING SIMULADO
+// ===============================
+const RANK_KEY = "bb_ranking";
+
+export function atualizarRanking() {
+    const tbody = document.querySelector("#ranking-table tbody");
+    if (!tbody) return;
+
+    // Pegando todos usuários salvos (simulado: só localStorage)
+    let ranking = JSON.parse(localStorage.getItem(RANK_KEY) || "[]");
+
+    // Atualiza ou adiciona usuário atual
+    const user = getUser();
+    if (user) {
+        const idx = ranking.findIndex(u => u.email === user.email);
+        if (idx >= 0) {
+            ranking[idx].saldo = getSaldo();
+        } else {
+            ranking.push({ nickname: user.nickname, email: user.email, saldo: getSaldo() });
+        }
+        // Ordena por saldo
+        ranking.sort((a,b) => b.saldo - a.saldo);
+        localStorage.setItem(RANK_KEY, JSON.stringify(ranking));
+    }
+
+    // Preenche tabela
+    tbody.innerHTML = ranking.map((u, i) => `
+        <tr class="border-b border-gray-700">
+            <td class="px-2 py-1">${i+1}</td>
+            <td class="px-2 py-1">${u.nickname}</td>
+            <td class="px-2 py-1">${u.saldo}</td>
+        </tr>
+    `).join("");
+}
+
+// Atualiza ranking automaticamente ao mudar de saldo
+window.addEventListener("DOMContentLoaded", atualizarRanking);
+
+
