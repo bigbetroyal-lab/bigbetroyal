@@ -136,3 +136,18 @@ main {
 #numero-container input {
     width: 60px;
 }
+#crash-start, #crash-cashout {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #ff6b6b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    transition: 0.3s;
+}
+#crash-start:hover, #crash-cashout:hover {
+    background-color: #ff4757;
+}
+
