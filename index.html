@@ -4,21 +4,28 @@
     <meta charset="UTF-8">
     <title>Meu Casino</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input { margin: 5px 0; padding: 5px; }
+        button { margin: 5px 0; padding: 5px 10px; }
+        #historico { list-style-type: none; padding-left: 0; }
+        #historico li { margin-bottom: 3px; }
+    </style>
 </head>
 <body>
     <h1>Bem-vindo ao Meu Casino!</h1>
 
     <!-- Formulário de login/registro -->
     <div id="auth-container">
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="senha" placeholder="Senha">
+        <input type="email" id="email" placeholder="Email"><br>
+        <input type="password" id="senha" placeholder="Senha"><br>
         <button id="btn-registrar">Registrar</button>
         <button id="btn-login">Login</button>
     </div>
 
     <!-- Informações do jogador -->
     <div id="user-info" style="display:none;">
-        <div id="saldo">Saldo: 1000 coins</div>
+        <div id="saldo">Saldo: 0 coins</div>
         <button id="apostar">Apostar 100 coins</button>
         <div id="resultado"></div>
         <h3>Histórico de Apostas</h3>
@@ -26,7 +33,7 @@
         <button id="btn-logout">Logout</button>
     </div>
 
-    <!-- Firebase SDK snippet -->
+    <!-- Firebase e lógica JS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -68,7 +75,7 @@
             document.getElementById("saldo").textContent = `Saldo: ${novoSaldo} coins`;
         }
 
-        // --- Histórico de apostas ---
+        // Histórico de apostas
         async function adicionarAposta(uid, valor, resultado) {
             await addDoc(collection(db, "users", uid, "historico"), {
                 valor: valor,
@@ -81,10 +88,8 @@
         async function carregarHistorico(uid) {
             const historicoEl = document.getElementById("historico");
             historicoEl.innerHTML = "";
-
             const q = query(collection(db, "users", uid, "historico"), orderBy("data", "desc"));
             const querySnapshot = await getDocs(q);
-
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const li = document.createElement("li");
@@ -146,7 +151,6 @@
         btnApostar.addEventListener("click", async () => {
             const user = auth.currentUser;
             if (!user) return alert("Você precisa estar logado para apostar!");
-
             try {
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
@@ -170,130 +174,5 @@
         });
 
     </script>
-</body>
-</html>
-            authDomain: "bigbetroyal-c1fb5.firebaseapp.com",
-            projectId: "bigbetroyal-c1fb5",
-            storageBucket: "bigbetroyal-c1fb5.firebasestorage.app",
-            messagingSenderId: "16493079216",
-            appId: "1:16493079216:web:ee35f501c6b6bb36376975"
-        };
-
-        // Inicializa Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        console.log("Firebase iniciado com sucesso!");
-
-        // --- FUNÇÕES FIRESTORE ---
-        async function criarDocumentoUsuario(uid) {
-            await setDoc(doc(db, "users", uid), { saldo: 1000 });
-        }
-
-        async function carregarSaldo(uid) {
-            const docRef = doc(db, "users", uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const saldo = docSnap.data().saldo;
-                document.getElementById("saldo").textContent = `Saldo: ${saldo} coins`;
-            } else {
-                await criarDocumentoUsuario(uid);
-                document.getElementById("saldo").textContent = `Saldo: 1000 coins`;
-            }
-        }
-
-        async function atualizarSaldo(uid, novoSaldo) {
-            await updateDoc(doc(db, "users", uid), { saldo: novoSaldo });
-            document.getElementById("saldo").textContent = `Saldo: ${novoSaldo} coins`;
-        }
-
-        // --- FUNÇÕES AUTH ---
-        const emailInput = document.getElementById("email");
-        const senhaInput = document.getElementById("senha");
-        const btnRegistrar = document.getElementById("btn-registrar");
-        const btnLogin = document.getElementById("btn-login");
-        const btnLogout = document.getElementById("btn-logout");
-        const authContainer = document.getElementById("auth-container");
-        const userInfo = document.getElementById("user-info");
-
-        btnRegistrar.addEventListener("click", async () => {
-            const email = emailInput.value;
-            const senha = senhaInput.value;
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-                await criarDocumentoUsuario(userCredential.user.uid);
-            } catch (error) {
-                alert(error.message);
-            }
-        });
-
-        btnLogin.addEventListener("click", async () => {
-            const email = emailInput.value;
-            const senha = senhaInput.value;
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-                carregarSaldo(userCredential.user.uid);
-            } catch (error) {
-                alert(error.message);
-            }
-        });
-
-        btnLogout.addEventListener("click", async () => {
-            await signOut(auth);
-        });
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                authContainer.style.display = "none";
-                userInfo.style.display = "block";
-                carregarSaldo(user.uid);
-            } else {
-                authContainer.style.display = "block";
-                userInfo.style.display = "none";
-            }
-        });
-
-        // --- FUNÇÃO APOSTAR ---
-        const btnApostar = document.getElementById("apostar");
-        btnApostar.addEventListener("click", async () => {
-            const user = auth.currentUser;
-            if (!user) {
-                return alert("Você precisa estar logado para apostar!");
-            }
-        
-            try {
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef);
-        
-                if (!docSnap.exists()) {
-                    return alert("Documento do usuário não encontrado!");
-                }
-        
-                let saldo = docSnap.data().saldo;
-        
-                if (saldo < 100) {
-                    return alert("Saldo insuficiente!");
-                }
-        
-                // Subtrair aposta
-                saldo -= 100;
-        
-                // Resultado aleatório
-                const ganhou = Math.random() < 0.5;
-                if (ganhou) saldo += 200;
-        
-                // Atualizar saldo
-                await atualizarSaldo(user.uid, saldo);
-        
-                document.getElementById("resultado").textContent = ganhou ? "Você ganhou!" : "Você perdeu!";
-            } catch (error) {
-                console.error(error);
-                alert("Erro ao apostar: " + error.message);
-            }
-        });
-
-    </script>
-
 </body>
 </html>
