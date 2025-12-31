@@ -1,110 +1,128 @@
-// ui.js
-import { auth, db } from "./firebase.js";
-import { 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    signOut, 
-    onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+// ===============================
+// ESTADO GLOBAL DO USUÁRIO
+// ===============================
+const USER_KEY = "bb_user";
+const SALDO_KEY = "bb_saldo";
 
-import { doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+// ===============================
+// SALDO (COINS)
+// ===============================
+export function getSaldo() {
+    return parseInt(localStorage.getItem(SALDO_KEY) || "0");
+}
 
-// Elementos da UI
-const authContainer = document.getElementById("auth-container");
-const btnLogin = document.getElementById("btn-login");
-const btnRegistrar = document.getElementById("btn-registrar");
-const btnLogout = document.getElementById("btn-logout");
-const emailInput = document.getElementById("email");
-const senhaInput = document.getElementById("senha");
-const nicknameInput = document.getElementById("nickname");
-const topSaldo = document.getElementById("top-saldo");
-const aside = document.querySelector("aside");
-const telas = document.querySelectorAll(".tela");
-const asideBtns = document.querySelectorAll("aside button");
+export function setSaldo(valor) {
+    localStorage.setItem(SALDO_KEY, valor);
+    atualizarTopo();
+}
 
-// --- Função para atualizar saldo de forma segura ---
-export async function atualizarSaldo(uid, novoSaldo) {
-    if (novoSaldo === undefined || novoSaldo === null) {
-        console.error("Saldo inválido:", novoSaldo);
+export function addSaldo(valor) {
+    setSaldo(getSaldo() + valor);
+}
+
+export function gastarSaldo(valor) {
+    let saldo = getSaldo();
+    if (saldo < valor) {
+        alert("❌ Saldo insuficiente");
+        return false;
+    }
+    setSaldo(saldo - valor);
+    return true;
+}
+
+// ===============================
+// USUÁRIO
+// ===============================
+export function getUser() {
+    return JSON.parse(localStorage.getItem(USER_KEY));
+}
+
+export function setUser(user) {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
+// ===============================
+// UI
+// ===============================
+export function atualizarTopo() {
+    const saldoEl = document.getElementById("top-saldo");
+    if (saldoEl) {
+        saldoEl.innerText = `Saldo: ${getSaldo()} coins`;
+    }
+}
+
+// ===============================
+// MOSTRAR / ESCONDER TELAS
+// ===============================
+function mostrarTela(id) {
+    document.querySelectorAll(".tela").forEach(t => t.classList.add("hidden"));
+    const tela = document.getElementById(id);
+    if (tela) tela.classList.remove("hidden");
+}
+
+// ===============================
+// MENU LATERAL
+// ===============================
+document.querySelectorAll("aside button").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const tela = btn.dataset.tela;
+        mostrarTela(tela);
+    });
+});
+
+// ===============================
+// LOGOUT
+// ===============================
+document.getElementById("btn-logout").addEventListener("click", () => {
+    localStorage.clear();
+    location.reload();
+});
+
+// ===============================
+// LOGIN / REGISTRO FAKE
+// ===============================
+document.getElementById("btn-registrar").addEventListener("click", () => {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+    const nickname = document.getElementById("nickname").value || "Jogador";
+
+    if (!email || !senha) {
+        alert("Preencha email e senha");
         return;
     }
-    const docRef = doc(db, "users", uid);
-    await updateDoc(docRef, { saldo: novoSaldo });
-    topSaldo.textContent = `Saldo: ${novoSaldo} coins`;
+
+    setUser({ email, nickname });
+    setSaldo(1000); // saldo inicial
+    iniciarSessao();
+});
+
+document.getElementById("btn-login").addEventListener("click", () => {
+    const user = getUser();
+    if (!user) {
+        alert("Usuário não encontrado. Registre-se.");
+        return;
+    }
+    iniciarSessao();
+});
+
+// ===============================
+// INICIAR SESSÃO
+// ===============================
+function iniciarSessao() {
+    document.getElementById("auth-container").classList.add("hidden");
+    mostrarTela("slot");
+    atualizarTopo();
+
+    // Atualizar perfil
+    const nickEl = document.getElementById("perfil-nickname");
+    if (nickEl) nickEl.innerText = getUser().nickname;
 }
 
-// --- Função para carregar saldo do Firestore ---
-async function carregarSaldo(uid) {
-    const docRef = doc(db, "users", uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        const saldo = docSnap.data().saldo ?? 1000;
-        topSaldo.textContent = `Saldo: ${saldo} coins`;
-        return saldo;
-    } else {
-        await setDoc(docRef, { saldo: 1000, nickname: emailInput.value.split("@")[0], avatar: "images/default.png" });
-        topSaldo.textContent = "Saldo: 1000 coins";
-        return 1000;
+// ===============================
+// AUTO LOGIN
+// ===============================
+window.addEventListener("DOMContentLoaded", () => {
+    if (getUser()) {
+        iniciarSessao();
     }
-}
-
-// --- Login ---
-btnLogin.addEventListener("click", async () => {
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
-        await carregarSaldo(userCredential.user.uid);
-    } catch (error) {
-        alert("Erro no login: " + error.message);
-    }
-});
-
-// --- Registro ---
-btnRegistrar.addEventListener("click", async () => {
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
-        const uid = userCredential.user.uid;
-        const nickname = nicknameInput.value || emailInput.value.split("@")[0];
-        await setDoc(doc(db, "users", uid), { saldo: 1000, nickname: nickname, avatar: "images/default.png" });
-        alert("Usuário registrado com sucesso!");
-    } catch (error) {
-        alert("Erro no registro: " + error.message);
-    }
-});
-
-// --- Logout ---
-btnLogout.addEventListener("click", async () => {
-    try {
-        await signOut(auth);
-        alert("Logout efetuado com sucesso!");
-    } catch (error) {
-        console.error("Erro ao fazer logout:", error);
-        alert("Erro ao fazer logout: " + error.message);
-    }
-});
-
-// --- Monitorar estado de autenticação ---
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        // Usuário logado
-        authContainer.style.display = "none";
-        aside.style.display = "block";
-        telas.forEach(tela => tela.style.display = "none");
-        await carregarSaldo(user.uid);
-    } else {
-        // Usuário deslogado
-        authContainer.style.display = "block";
-        aside.style.display = "none";
-        topSaldo.textContent = "Saldo: 0 coins";
-        telas.forEach(tela => tela.style.display = "none");
-    }
-});
-
-// --- Controle de abas ---
-asideBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const target = btn.dataset.tela;
-        telas.forEach(tela => tela.style.display = "none");
-        const secao = document.getElementById(target);
-        if (secao) secao.style.display = "block";
-    });
 });
