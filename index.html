@@ -23,6 +23,8 @@
             <li><button data-tela="crash">📈 Crash</button></li>
             <li><button data-tela="ranking">🏆 Ranking</button></li>
             <li><button data-tela="historico">📜 Histórico</button></li>
+            <li><button data-tela="missoes">🎯 Missões</button></li>
+
         </ul>
     </aside>
 
@@ -82,6 +84,15 @@
 
 <div id="crash-resultado" style="margin-top: 10px; font-weight:bold;"></div>
 </section>
+        <section id="missoes" class="tela" style="display:none;">
+    <h3>🎯 Missões e Recompensas</h3>
+    <ul id="missoes-list">
+        <!-- Missões serão listadas aqui pelo JS -->
+    </ul>
+    <button id="resgatar-recompensa">Resgatar Recompensa Diária</button>
+    <div id="missoes-resultado" style="margin-top:10px; font-weight:bold;"></div>
+</section>
+
         <section id="ranking" class="tela" style="display:none;"><h3>🏆 Ranking de Jogadores</h3>
 <table id="ranking-table" style="width:100%; margin-top:10px; border-collapse: collapse;">
     <thead>
