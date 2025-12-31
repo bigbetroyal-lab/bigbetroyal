@@ -130,6 +130,16 @@
         carregarRanking();
     });
 </script>
+    <script type="module" src="js/missoes.js"></script>
+<script type="module">
+    import { carregarMissoes } from "./js/missoes.js";
+
+    const missoesBtn = document.querySelector('aside button[data-tela="missoes"]');
+    missoesBtn.addEventListener("click", () => {
+        carregarMissoes();
+    });
+</script>
+
     
 </body>
 </html>
