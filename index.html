@@ -120,21 +120,39 @@
         const btnApostar = document.getElementById("apostar");
         btnApostar.addEventListener("click", async () => {
             const user = auth.currentUser;
-            if (!user) return alert("Você precisa estar logado para apostar!");
-
-            const docRef = doc(db, "users", user.uid);
-            const docSnap = await getDoc(docRef);
-            let saldo = docSnap.data().saldo;
-
-            if (saldo < 100) return alert("Saldo insuficiente!");
-
-            saldo -= 100;
-            const ganhou = Math.random() < 0.5; // 50% chance
-            if (ganhou) saldo += 200;
-
-            await atualizarSaldo(user.uid, saldo);
-
-            document.getElementById("resultado").textContent = ganhou ? "Você ganhou!" : "Você perdeu!";
+            if (!user) {
+                return alert("Você precisa estar logado para apostar!");
+            }
+        
+            try {
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+        
+                if (!docSnap.exists()) {
+                    return alert("Documento do usuário não encontrado!");
+                }
+        
+                let saldo = docSnap.data().saldo;
+        
+                if (saldo < 100) {
+                    return alert("Saldo insuficiente!");
+                }
+        
+                // Subtrair aposta
+                saldo -= 100;
+        
+                // Resultado aleatório
+                const ganhou = Math.random() < 0.5;
+                if (ganhou) saldo += 200;
+        
+                // Atualizar saldo
+                await atualizarSaldo(user.uid, saldo);
+        
+                document.getElementById("resultado").textContent = ganhou ? "Você ganhou!" : "Você perdeu!";
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao apostar: " + error.message);
+            }
         });
 
     </script>
