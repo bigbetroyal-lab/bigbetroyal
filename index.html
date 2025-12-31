@@ -21,19 +21,157 @@
         <div id="saldo">Saldo: 1000 coins</div>
         <button id="apostar">Apostar 100 coins</button>
         <div id="resultado"></div>
+        <h3>Histórico de Apostas</h3>
+        <ul id="historico"></ul>
         <button id="btn-logout">Logout</button>
     </div>
 
     <!-- Firebase SDK snippet -->
     <script type="module">
-        // Importando Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDw0_MsxvRvVhsgSWvzMrVX3sTlmG2ALcg",
+            authDomain: "bigbetroyal-c1fb5.firebaseapp.com",
+            projectId: "bigbetroyal-c1fb5",
+            storageBucket: "bigbetroyal-c1fb5.firebasestorage.app",
+            messagingSenderId: "16493079216",
+            appId: "1:16493079216:web:ee35f501c6b6bb36376975"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // --- Funções Firestore ---
+        async function criarDocumentoUsuario(uid) {
+            await setDoc(doc(db, "users", uid), { saldo: 1000 });
+        }
+
+        async function carregarSaldo(uid) {
+            const docRef = doc(db, "users", uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const saldo = docSnap.data().saldo;
+                document.getElementById("saldo").textContent = `Saldo: ${saldo} coins`;
+            } else {
+                await criarDocumentoUsuario(uid);
+                document.getElementById("saldo").textContent = `Saldo: 1000 coins`;
+            }
+            await carregarHistorico(uid);
+        }
+
+        async function atualizarSaldo(uid, novoSaldo) {
+            await updateDoc(doc(db, "users", uid), { saldo: novoSaldo });
+            document.getElementById("saldo").textContent = `Saldo: ${novoSaldo} coins`;
+        }
+
+        // --- Histórico de apostas ---
+        async function adicionarAposta(uid, valor, resultado) {
+            await addDoc(collection(db, "users", uid, "historico"), {
+                valor: valor,
+                resultado: resultado,
+                data: new Date()
+            });
+            await carregarHistorico(uid);
+        }
+
+        async function carregarHistorico(uid) {
+            const historicoEl = document.getElementById("historico");
+            historicoEl.innerHTML = "";
+
+            const q = query(collection(db, "users", uid, "historico"), orderBy("data", "desc"));
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const li = document.createElement("li");
+                li.textContent = `${data.data.toDateString()} - Aposta: ${data.valor} coins - ${data.resultado}`;
+                historicoEl.appendChild(li);
+            });
+        }
+
+        // --- Autenticação ---
+        const emailInput = document.getElementById("email");
+        const senhaInput = document.getElementById("senha");
+        const btnRegistrar = document.getElementById("btn-registrar");
+        const btnLogin = document.getElementById("btn-login");
+        const btnLogout = document.getElementById("btn-logout");
+        const authContainer = document.getElementById("auth-container");
+        const userInfo = document.getElementById("user-info");
+        const btnApostar = document.getElementById("apostar");
+
+        btnRegistrar.addEventListener("click", async () => {
+            const email = emailInput.value.trim();
+            const senha = senhaInput.value;
+            if (!email || !senha) return alert("Preencha email e senha!");
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+                await criarDocumentoUsuario(userCredential.user.uid);
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        btnLogin.addEventListener("click", async () => {
+            const email = emailInput.value.trim();
+            const senha = senhaInput.value;
+            if (!email || !senha) return alert("Preencha email e senha!");
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+                carregarSaldo(userCredential.user.uid);
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        btnLogout.addEventListener("click", async () => {
+            await signOut(auth);
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authContainer.style.display = "none";
+                userInfo.style.display = "block";
+                carregarSaldo(user.uid);
+            } else {
+                authContainer.style.display = "block";
+                userInfo.style.display = "none";
+            }
+        });
+
+        // --- Apostar ---
+        btnApostar.addEventListener("click", async () => {
+            const user = auth.currentUser;
+            if (!user) return alert("Você precisa estar logado para apostar!");
+
+            try {
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (!docSnap.exists()) return alert("Documento do usuário não encontrado!");
+
+                let saldo = docSnap.data().saldo;
+                if (saldo < 100) return alert("Saldo insuficiente!");
+
+                saldo -= 100;
+                const ganhou = Math.random() < 0.5;
+                if (ganhou) saldo += 200;
+
+                await atualizarSaldo(user.uid, saldo);
+                await adicionarAposta(user.uid, 100, ganhou ? "Ganhou" : "Perdeu");
+
+                document.getElementById("resultado").textContent = ganhou ? "Você ganhou!" : "Você perdeu!";
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao apostar: " + error.message);
+            }
+        });
+
+    </script>
+</body>
+</html>
             authDomain: "bigbetroyal-c1fb5.firebaseapp.com",
             projectId: "bigbetroyal-c1fb5",
             storageBucket: "bigbetroyal-c1fb5.firebasestorage.app",
