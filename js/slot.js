@@ -40,14 +40,18 @@ spinButtons.forEach(btn => {
         // Verifica resultado após animação
         setTimeout(async () => {
             let ganhou = finalSymbols.every(s => s === finalSymbols[0]);
-            let premio = ganhou ? aposta*4 : 0; // Jackpot x4
+            let premio = ganhou ? aposta * 4 : 0; // Jackpot x4
             if(ganhou) saldo += premio;
             await atualizarSaldo(user.uid, saldo);
-
+        
             slotResultado.textContent = ganhou 
                 ? `🎉 Jackpot! Você ganhou ${premio} coins!`
                 : `💔 Tente novamente!`;
-
+        
+            // Tocar som
+            const audio = new Audio(ganhou ? 'sounds/win.mp3' : 'sounds/lose.mp3');
+            audio.play();
+        
             // Adiciona ao histórico
             await adicionarAposta(user.uid, aposta, ganhou ? "Ganhou Slot" : "Perdeu Slot");
         }, 600);
