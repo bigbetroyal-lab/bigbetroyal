@@ -2,225 +2,56 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Meu Casino</title>
-    <!-- Tailwind CSS gratuito -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.4/dist/tailwind.min.css" rel="stylesheet">
+    <title>BigBetRoyal Casino</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex flex-col">
+<body>
 
-    <!-- Topo -->
-    <header class="bg-black flex justify-between items-center p-4 shadow-lg fixed w-full z-50">
-        <div class="text-2xl font-bold flex items-center gap-2">
-            🎰 Meu Casino
-        </div>
-        <div class="flex items-center gap-4">
-            <span id="top-saldo">Saldo: 0 coins</span>
-            <button id="btn-logout" class="bg-yellow-500 text-black px-3 py-1 rounded hover:bg-yellow-400 transition">Logout</button>
-        </div>
-    </header>
+<header class="topbar">
+    <div class="logo">🎰 BigBetRoyal</div>
+    <div class="balance">Saldo: <span id="saldo">1000</span> COINS</div>
+</header>
 
-    <div class="flex flex-1 pt-20">
-        <!-- Menu lateral -->
-        <aside class="bg-gray-800 w-48 p-4 hidden md:block">
-            <ul class="space-y-2">
-                <li><button data-tela="slot" class="w-full text-left px-3 py-2 rounded hover:bg-gray-700 transition">🎰 Slots</button></li>
-                <li><button data-tela="roleta" class="w-full text-left px-3 py-2 rounded hover:bg-gray-700 transition">🎡 Roleta</button></li>
-                <li><button data-tela="crash" class="w-full text-left px-3 py-2 rounded hover:bg-gray-700 transition">📈 Crash</button></li>
-                <li><button data-tela="ranking" class="w-full text-left px-3 py-2 rounded hover:bg-gray-700 transition">🏆 Ranking</button></li>
-                <li><button data-tela="historico" class="w-full text-left px-3 py-2 rounded hover:bg-gray-700 transition">📜 Histórico</button></li>
-                <li><button data-tela="missoes" class="w-full text-left px-3 py-2 rounded hover:bg-gray-700 transition">🎯 Missões</button></li>
-                <li><button data-tela="perfil" class="w-full text-left px-3 py-2 rounded hover:bg-gray-700 transition">🧑 Perfil</button></li>
-                <li><button data-tela="chat" class="w-full text-left px-3 py-2 rounded hover:bg-gray-700 transition">💬 Chat</button></li>
-            </ul>
-        </aside>
+<div class="layout">
+    <aside class="sidebar">
+        <button data-page="home">🏠 Home</button>
+        <button data-page="slot">🎰 Slots</button>
+        <button data-page="roleta">🎡 Roleta</button>
+        <button data-page="crash">📈 Crash</button>
+        <button data-page="ranking">🏆 Ranking</button>
+    </aside>
 
-        <!-- Área principal -->
-        <main class="flex-1 p-6 overflow-y-auto">
+    <main class="content">
 
-            <!-- Tela de login/registro -->
-            <section id="auth-container" class="max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h3 class="text-xl font-bold mb-4 text-center">🔐 Login / Registro</h3>
-                <div class="mb-2"><input type="email" id="email" placeholder="Email" class="w-full p-2 rounded bg-gray-700"></div>
-                <div class="mb-2"><input type="password" id="senha" placeholder="Senha" class="w-full p-2 rounded bg-gray-700"></div>
-                <div class="mb-4"><input type="text" id="nickname" placeholder="Nickname (opcional)" class="w-full p-2 rounded bg-gray-700"></div>
-                <div class="flex justify-between gap-2">
-                    <button id="btn-registrar" class="flex-1 bg-yellow-500 text-black py-2 rounded hover:bg-yellow-400 transition">Registrar</button>
-                    <button id="btn-login" class="flex-1 bg-green-500 py-2 rounded hover:bg-green-400 transition">Login</button>
+        <section id="home" class="page active">
+            <h2>🔥 Jogos Populares</h2>
+
+            <div class="games-grid">
+                <div class="game-card" data-page="slot">
+                    <img src="https://i.ytimg.com/vi/oi34YY2PgsM/maxresdefault.jpg">
+                    <span>Slot Royal 777</span>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Perfil -->
-            <section id="perfil" class="tela hidden max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-                <h3 class="text-xl font-bold mb-4">🧑 Perfil do Jogador</h3>
-                <div class="mb-2">
-                    <label class="font-semibold">Nickname:</label>
-                    <span id="perfil-nickname">Usuário</span>
-                </div>
-                <div class="mb-2">
-                    <label class="font-semibold">Avatar:</label>
-                    <img id="perfil-avatar" src="images/default.png" alt="Avatar" width="80" class="inline-block mr-2 rounded">
-                    <select id="perfil-avatar-select" class="p-1 rounded bg-gray-700">
-                        <option value="images/default.png">Padrão</option>
-                        <option value="images/avatar1.png">Avatar 1</option>
-                        <option value="images/avatar2.png">Avatar 2</option>
-                    </select>
-                </div>
-            </section>
+        <section id="slot" class="page">
+            <h2>🎰 Slot Royal 777</h2>
+            <div id="slot-container"></div>
+        </section>
 
-            <!-- Slot Machine -->
-            <section id="slot" class="tela hidden max-w-5xl mx-auto bg-gray-900 p-6 rounded-xl shadow-2xl mt-6">
-                <h3 class="text-2xl font-bold text-center mb-4">🎰 Mega Slot 5x3</h3>
-            
-                <!-- Jackpot -->
-                <div class="text-center text-yellow-400 font-bold mb-4">
-                    Jackpot: <span id="jackpot">1000</span> coins
-                </div>
-            
-                <!-- Reels -->
-                <div id="slot-reels" class="flex justify-center gap-2 bg-gray-800 p-4 rounded-lg shadow-inner mb-4">
-                    <!-- 5 rolos, cada um com 3 linhas -->
-                    <div class="reel-col flex flex-col gap-2 bg-black p-1 rounded-lg shadow-lg text-4xl w-20 h-60">
-                        <div class="reel-symbol">🍒</div>
-                        <div class="reel-symbol">🍋</div>
-                        <div class="reel-symbol">🍉</div>
-                    </div>
-                    <div class="reel-col flex flex-col gap-2 bg-black p-1 rounded-lg shadow-lg text-4xl w-20 h-60">
-                        <div class="reel-symbol">🍒</div>
-                        <div class="reel-symbol">🍋</div>
-                        <div class="reel-symbol">🍉</div>
-                    </div>
-                    <div class="reel-col flex flex-col gap-2 bg-black p-1 rounded-lg shadow-lg text-4xl w-20 h-60">
-                        <div class="reel-symbol">🍒</div>
-                        <div class="reel-symbol">🍋</div>
-                        <div class="reel-symbol">🍉</div>
-                    </div>
-                    <div class="reel-col flex flex-col gap-2 bg-black p-1 rounded-lg shadow-lg text-4xl w-20 h-60">
-                        <div class="reel-symbol">🍒</div>
-                        <div class="reel-symbol">🍋</div>
-                        <div class="reel-symbol">🍉</div>
-                    </div>
-                    <div class="reel-col flex flex-col gap-2 bg-black p-1 rounded-lg shadow-lg text-4xl w-20 h-60">
-                        <div class="reel-symbol">🍒</div>
-                        <div class="reel-symbol">🍋</div>
-                        <div class="reel-symbol">🍉</div>
-                    </div>
-                </div>
-            
-                <!-- Botões de aposta -->
-                <div class="flex justify-center gap-4 mb-2">
-                    <button data-aposta="50" class="spin-btn bg-yellow-500 text-black px-6 py-3 rounded-full font-bold hover:bg-yellow-400 transition transform hover:scale-105">Girar 50 coins</button>
-                    <button data-aposta="100" class="spin-btn bg-yellow-500 text-black px-6 py-3 rounded-full font-bold hover:bg-yellow-400 transition transform hover:scale-105">Girar 100 coins</button>
-                </div>
-            
-                <!-- Resultado -->
-                <div id="slot-resultado" class="text-center mt-4 text-xl font-bold h-6"></div>
-            </section>
+        <section id="roleta" class="page">
+            <h2>🎡 Roleta</h2>
+            <p>Em desenvolvimento</p>
+        </section>
 
+        <section id="crash" class="page">
+            <h2>📈 Crash</h2>
+            <p>Em desenvolvimento</p>
+        </section>
 
+    </main>
+</div>
 
-
-            <!-- Roleta -->
-            <section id="roleta" class="tela hidden max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-                <h3 class="text-xl font-bold mb-4">🎡 Roleta Virtual</h3>
-                <div id="container">
-                    <div id="notification" class="mb-2 bg-gray-700 p-2 rounded flex justify-between items-center">
-                        <span class="nSpan">Escolha sua aposta!</span>
-                        <button class="nBtn bg-yellow-500 text-black px-2 py-1 rounded hover:bg-yellow-400 transition" onclick="this.parentElement.style.display='none'">Ok</button>
-                    </div>
-                    <div id="betting_board" class="mb-4">
-                        <div class="bbtop flex gap-2 mb-2">
-                            <div class="bbtoptwo flex-1 text-center py-2 bg-red-600 rounded">Vermelho</div>
-                            <div class="bbtoptwo flex-1 text-center py-2 bg-black text-white rounded">Preto</div>
-                        </div>
-                        <div class="number_board grid grid-cols-6 gap-1">
-                            <div class="number_block number_0 bg-green-600 text-center py-2 rounded"><span class="nbn">0</span></div>
-                            <!-- Números 1-36 serão gerados via JS -->
-                        </div>
-                        <div class="bo3_board flex gap-2 mt-2">
-                            <div class="bo3_block flex-1 text-center py-2 bg-gray-700 rounded">1ª Duzia</div>
-                            <div class="bo3_block flex-1 text-center py-2 bg-gray-700 rounded">2ª Duzia</div>
-                            <div class="bo3_block flex-1 text-center py-2 bg-gray-700 rounded">3ª Duzia</div>
-                        </div>
-                        <div class="oto_board flex gap-2 mt-2">
-                            <div class="oto_block flex-1 text-center py-2 bg-gray-700 rounded">1-18</div>
-                            <div class="oto_block flex-1 text-center py-2 bg-gray-700 rounded">Par/Ímpar</div>
-                            <div class="oto_block flex-1 text-center py-2 bg-gray-700 rounded">19-36</div>
-                        </div>
-                    </div>
-                    <button class="spinBtn bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition" id="roleta-spin">Spin</button>
-                </div>
-            </section>
-
-            <!-- Crash Game -->
-            <section id="crash" class="tela hidden max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-                <h3 class="text-xl font-bold mb-4">📈 Crash Game</h3>
-                <div class="mb-2 flex items-center gap-2">
-                    <label>Aposta (coins): </label>
-                    <input type="number" id="crash-aposta" value="50" min="10" class="p-2 rounded bg-gray-700 w-24">
-                </div>
-                <div class="flex gap-2 mb-2">
-                    <button id="crash-start" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition">Iniciar Rodada</button>
-                    <button id="crash-cashout" disabled class="bg-gray-600 px-4 py-2 rounded">Sacar</button>
-                </div>
-                <div id="crash-multiplicador" class="mt-2 text-lg font-bold">Multiplicador: 1.00x</div>
-                <div id="crash-resultado" class="mt-2 font-bold"></div>
-            </section>
-
-            <!-- Missões -->
-            <section id="missoes" class="tela hidden max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-                <h3 class="text-xl font-bold mb-4">🎯 Missões e Recompensas</h3>
-                <ul id="missoes-list" class="mb-2"></ul>
-                <button id="resgatar-recompensa" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition">Resgatar Recompensa Diária</button>
-                <div id="missoes-resultado" class="mt-2 font-bold"></div>
-            </section>
-
-            <!-- Ranking -->
-            <section id="ranking" class="tela hidden max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-                <h3 class="text-xl font-bold mb-4">🏆 Ranking de Jogadores</h3>
-                <table id="ranking-table" class="w-full text-white border-collapse">
-                    <thead class="bg-gray-700 text-yellow-400">
-                        <tr>
-                            <th class="px-2 py-1 border">#</th>
-                            <th class="px-2 py-1 border">Usuário</th>
-                            <th class="px-2 py-1 border">Saldo</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-
-            <!-- Histórico -->
-            <section id="historico" class="tela hidden max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-                <div class="flex gap-2 mb-2">
-                    <button data-filter="all" class="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600 transition">Todos</button>
-                    <button data-filter="slot" class="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600 transition">Slot</button>
-                    <button data-filter="roleta" class="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600 transition">Roleta</button>
-                    <button data-filter="crash" class="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600 transition">Crash</button>
-                </div>
-                <ul id="historico-list" class="list-disc pl-5"></ul>
-            </section>
-
-            <!-- Chat -->
-            <section id="chat" class="tela hidden max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-                <h3 class="text-xl font-bold mb-2">💬 Chat Público</h3>
-                <div id="chat-mensagens" class="h-48 overflow-y-scroll border border-gray-700 p-2 rounded mb-2"></div>
-                <div class="flex gap-2">
-                    <input type="text" id="chat-input" placeholder="Digite sua mensagem" class="flex-1 p-2 rounded bg-gray-700">
-                    <button id="chat-enviar" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition">Enviar</button>
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-    <!-- Scripts -->
-    <script type="module" src="js/ui.js"></script>
-    <script type="module" src="js/slot.js"></script>
-    <script type="module" src="js/roleta.js"></script>
-    <script type="module" src="js/crash.js"></script>
-    <script type="module" src="js/ranking.js"></script>
-    <script type="module" src="js/missoes.js"></script>
-    <script type="module" src="js/perfil.js"></script>
-    <script type="module" src="js/chat.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
