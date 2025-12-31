@@ -10,6 +10,35 @@
     <div id="saldo">Saldo: 1000 coins</div>
     <button id="apostar">Apostar 100 coins</button>
     <div id="resultado"></div>
+
+    <!-- Firebase SDK snippet -->
+    <script type="module">
+        // Importando Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDw0_MsxvRvVhsgSWvzMrVX3sTlmG2ALcg",
+            authDomain: "bigbetroyal-c1fb5.firebaseapp.com",
+            projectId: "bigbetroyal-c1fb5",
+            storageBucket: "bigbetroyal-c1fb5.firebasestorage.app",
+            messagingSenderId: "16493079216",
+            appId: "1:16493079216:web:ee35f501c6b6bb36376975"
+        };
+
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Inicializa Firestore e Auth
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        console.log("Firebase iniciado com sucesso!");
+    </script>
+
     <script src="script.js"></script>
 </body>
 </html>
+
