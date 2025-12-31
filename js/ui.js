@@ -126,3 +126,50 @@ window.addEventListener("DOMContentLoaded", () => {
         iniciarSessao();
     }
 });
+
+// ===============================
+// HISTÓRICO DE APOSTAS
+// ===============================
+const HIST_KEY = "bb_historico";
+
+export function adicionarHistorico(jogo, valor, resultado) {
+    let hist = JSON.parse(localStorage.getItem(HIST_KEY) || "[]");
+    hist.push({
+        jogo,
+        valor,
+        resultado,
+        date: new Date().toLocaleString()
+    });
+    localStorage.setItem(HIST_KEY, JSON.stringify(hist));
+    atualizarHistorico();
+}
+
+export function getHistorico() {
+    return JSON.parse(localStorage.getItem(HIST_KEY) || "[]");
+}
+
+export function atualizarHistorico(filter = "all") {
+    const ul = document.getElementById("historico-list");
+    if (!ul) return;
+
+    let hist = getHistorico();
+    if (filter !== "all") {
+        hist = hist.filter(h => h.jogo === filter);
+    }
+
+    ul.innerHTML = hist.map(h => `
+        <li class="mb-1 border-b border-gray-700 py-1">
+            ${h.date} — ${h.jogo} — ${h.valor} coins — ${h.resultado}
+        </li>
+    `).join("");
+}
+
+// ===============================
+// FILTRO DE HISTÓRICO
+// ===============================
+document.querySelectorAll('#historico button[data-filter]').forEach(btn => {
+    btn.addEventListener("click", () => {
+        atualizarHistorico(btn.dataset.filter);
+    });
+});
+
