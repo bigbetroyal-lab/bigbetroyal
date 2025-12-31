@@ -103,6 +103,16 @@
     <script type="module" src="js/slot.js"></script>
     <script type="module" src="js/roleta.js"></script>
     <script type="module" src="js/crash.js"></script>
+    <script type="module" src="js/ranking.js"></script>
+<script type="module">
+    import { carregarRanking } from "./js/ranking.js";
+
+    // Carrega ranking ao abrir a aba
+    const rankingBtn = document.querySelector('aside button[data-tela="ranking"]');
+    rankingBtn.addEventListener("click", () => {
+        carregarRanking();
+    });
+</script>
     
 </body>
 </html>
