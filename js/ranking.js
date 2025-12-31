@@ -11,7 +11,7 @@ export async function carregarRanking() {
     querySnapshot.forEach(doc => {
         const data = doc.data();
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${i}</td><td>${doc.id}</td><td>${data.saldo}</td>`;
+        tr.innerHTML = `<td>${i}</td><td>${data.nickname || doc.id}</td><td>${data.saldo}</td>`;
         tabelaRanking.appendChild(tr);
         i++;
     });
