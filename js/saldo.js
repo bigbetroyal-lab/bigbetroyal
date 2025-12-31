@@ -24,18 +24,21 @@ export async function atualizarSaldo(uid, novoSaldo) {
 }
 
 // Histórico
-export async function carregarHistorico(uid) {
+export async function carregarHistoricoFiltrado(uid, tipo="all"){
     const historicoEl = document.getElementById("historico");
     historicoEl.innerHTML = "";
-    const q = query(collection(db, "users", uid, "historico"), orderBy("data", "desc"));
+    const q = query(collection(db, "users", uid, "historico"), orderBy("data","desc"));
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(doc=>{
         const data = doc.data();
-        const li = document.createElement("li");
-        li.textContent = `${new Date(data.data.seconds*1000).toLocaleString()} - Aposta: ${data.valor} coins - ${data.resultado}`;
-        historicoEl.appendChild(li);
+        if(tipo==="all" || data.resultado.toLowerCase().includes(tipo)){
+            const li = document.createElement("li");
+            li.textContent = `${new Date(data.data.seconds*1000).toLocaleString()} - Aposta: ${data.valor} coins - ${data.resultado}`;
+            historicoEl.appendChild(li);
+        }
     });
 }
+
 
 // Adiciona aposta ao histórico
 export async function adicionarAposta(uid, valor, resultado) {
