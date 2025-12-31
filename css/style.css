@@ -1,23 +1,90 @@
+/* Reset básico */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+/* Corpo */
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
-    background-color: #121212;
-    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    background: #1e1e2f;
+    color: #fff;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 60px 1fr;
+    grid-template-areas:
+        "header header"
+        "aside main";
+    height: 100vh;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin-top: 20px;
-    cursor: pointer;
+/* Topo */
+header {
+    grid-area: header;
+    background: #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 2px solid #ff6b6b;
+}
+
+header .logo { font-size: 1.5em; font-weight: bold; color: #ffd700; }
+
+header .top-info button {
+    background-color: #ff6b6b;
     border: none;
     border-radius: 5px;
-    background-color: #ff4500;
-    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
 }
 
-#saldo, #resultado {
-    margin-top: 20px;
-    font-size: 20px;
+header .top-info button:hover {
+    background-color: #ff4757;
+}
+
+/* Menu lateral */
+aside {
+    grid-area: aside;
+    background-color: #222;
+    padding: 20px;
+}
+
+aside ul {
+    list-style: none;
+}
+
+aside li {
+    margin-bottom: 15px;
+}
+
+aside button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+aside button:hover {
+    background-color: #ff6b6b;
+}
+
+/* Área principal */
+main {
+    grid-area: main;
+    padding: 20px;
+    overflow-y: auto;
+    background: #1e1e2f;
+}
+
+/* Telas */
+.tela {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 80%;
 }
