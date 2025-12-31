@@ -75,26 +75,37 @@
         </section>
 
         <!-- Roleta -->
-        <section id="roleta" class="tela" style="display:none;">
-            <h3>🎡 Roleta Virtual</h3>
-            <div style="margin: 10px 0;">
-                <label>Aposta (coins): </label>
-                <input type="number" id="roleta-aposta" value="50" min="10">
+       <section id="roleta" class="tela" style="display:none;">
+          <h3>🎡 Roleta Virtual</h3>
+        
+          <!-- Área de apostas -->
+          <div id="roleta-apostas">
+            <h4>Escolha sua aposta:</h4>
+            <div id="apostas-cor">
+              <button data-aposta="vermelho" class="aposta-btn" style="background:red; color:white;">Vermelho</button>
+              <button data-aposta="preto" class="aposta-btn" style="background:black; color:white;">Preto</button>
+              <button data-aposta="verde" class="aposta-btn" style="background:green; color:white;">Verde 0</button>
             </div>
-            <div style="margin: 10px 0;">
-                <label>Escolha:</label>
-                <select id="roleta-tipo">
-                    <option value="cor">Cor</option>
-                    <option value="numero">Número</option>
-                </select>
+            <div id="apostas-numero" style="display:flex; flex-wrap: wrap; max-width: 360px; margin-top:10px;">
+              <!-- Botões de números 0 a 36 -->
+              <script>
+                for(let i=0;i<=36;i++){
+                  document.write(`<button class="numero-btn" data-aposta="${i}">${i}</button>`);
+                }
+              </script>
             </div>
-            <div id="numero-container" style="margin:10px 0; display:none;">
-                <label>Número (0-36): </label>
-                <input type="number" id="roleta-numero" min="0" max="36" value="7">
-            </div>
-            <button id="roleta-spin">Girar Roleta</button>
-            <div id="roleta-resultado" style="margin-top:10px; font-weight:bold;"></div>
+          </div>
+        
+          <!-- Roleta visual -->
+          <div id="roleta-visual" style="position:relative; width:300px; height:300px; margin:20px auto;">
+            <canvas id="canvas-roleta" width="300" height="300"></canvas>
+            <div id="bola" style="position:absolute; width:15px; height:15px; border-radius:50%; background:white; top:10px; left:142px; z-index:10;"></div>
+          </div>
+        
+          <button id="roleta-spin">Girar Roleta</button>
+          <div id="roleta-resultado" style="margin-top:10px; font-weight:bold;"></div>
         </section>
+
 
         <!-- Crash Game -->
         <section id="crash" class="tela" style="display:none;">
