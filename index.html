@@ -24,146 +24,159 @@
             <li><button data-tela="ranking">🏆 Ranking</button></li>
             <li><button data-tela="historico">📜 Histórico</button></li>
             <li><button data-tela="missoes">🎯 Missões</button></li>
-
+            <li><button data-tela="perfil">🧑 Perfil</button></li>
+            <li><button data-tela="chat">💬 Chat</button></li>
         </ul>
     </aside>
 
     <!-- Área principal -->
     <main>
+        <!-- Perfil -->
         <section id="perfil" class="tela" style="display:none;">
-    <h3>🧑 Perfil do Jogador</h3>
-    <div>
-        <label>Nickname:</label>
-        <span id="perfil-nickname">Usuário</span>
-    </div>
-    <div>
-        <label>Avatar:</label>
-        <img id="perfil-avatar" src="images/default.png" alt="Avatar" width="80">
-        <select id="perfil-avatar-select">
-            <option value="images/default.png">Padrão</option>
-            <option value="images/avatar1.png">Avatar 1</option>
-            <option value="images/avatar2.png">Avatar 2</option>
-        </select>
-    </div>
-</section>
+            <h3>🧑 Perfil do Jogador</h3>
+            <div>
+                <label>Nickname:</label>
+                <span id="perfil-nickname">Usuário</span>
+            </div>
+            <div>
+                <label>Avatar:</label>
+                <img id="perfil-avatar" src="images/default.png" alt="Avatar" width="80">
+                <select id="perfil-avatar-select">
+                    <option value="images/default.png">Padrão</option>
+                    <option value="images/avatar1.png">Avatar 1</option>
+                    <option value="images/avatar2.png">Avatar 2</option>
+                </select>
+            </div>
+        </section>
 
-        <section id="slot" class="tela"><h3>🎰 Slot Machine</h3>
-<div id="slot" style="display:flex; justify-content:center; margin:10px 0;">
-    <div class="reel">🍒</div>
-    <div class="reel">🍋</div>
-    <div class="reel">🍉</div>
-</div>
+        <!-- Slot Machine -->
+        <section id="slot" class="tela">
+            <h3>🎰 Slot Machine</h3>
+            <div id="slot-reels" style="display:flex; justify-content:center; margin:10px 0;">
+                <div class="reel">🍒</div>
+                <div class="reel">🍋</div>
+                <div class="reel">🍉</div>
+            </div>
 
-<div style="margin:10px 0;">
-    <button data-aposta="50" class="spin-btn">Girar 50 coins</button>
-    <button data-aposta="100" class="spin-btn">Girar 100 coins</button>
-</div>
+            <div style="margin:10px 0;">
+                <button data-aposta="50" class="spin-btn">Girar 50 coins</button>
+                <button data-aposta="100" class="spin-btn">Girar 100 coins</button>
+            </div>
 
-<div id="slot-resultado"></div>
-</section>
-        <section id="roleta" class="tela" style="display:none;"><h3>🎡 Roleta Virtual</h3>
+            <div id="slot-resultado"></div>
+        </section>
 
-<div style="margin: 10px 0;">
-    <label>Aposta (coins): </label>
-    <input type="number" id="roleta-aposta" value="50" min="10">
-</div>
+        <!-- Roleta -->
+        <section id="roleta" class="tela" style="display:none;">
+            <h3>🎡 Roleta Virtual</h3>
 
-<div style="margin: 10px 0;">
-    <label>Escolha:</label>
-    <select id="roleta-tipo">
-        <option value="cor">Cor</option>
-        <option value="numero">Número</option>
-    </select>
-</div>
+            <div style="margin: 10px 0;">
+                <label>Aposta (coins): </label>
+                <input type="number" id="roleta-aposta" value="50" min="10">
+            </div>
 
-<div style="margin: 10px 0;" id="numero-container" style="display:none;">
-    <label>Número (0-36): </label>
-    <input type="number" id="roleta-numero" min="0" max="36" value="7">
-</div>
+            <div style="margin: 10px 0;">
+                <label>Escolha:</label>
+                <select id="roleta-tipo">
+                    <option value="cor">Cor</option>
+                    <option value="numero">Número</option>
+                </select>
+            </div>
 
-<button id="roleta-spin">Girar Roleta</button>
+            <div id="numero-container" style="margin:10px 0; display:none;">
+                <label>Número (0-36): </label>
+                <input type="number" id="roleta-numero" min="0" max="36" value="7">
+            </div>
 
-<div id="roleta-resultado" style="margin-top:10px; font-weight:bold;"></div>
-</section>
-        <section id="crash" class="tela" style="display:none;"><h3>📈 Crash Game</h3>
+            <button id="roleta-spin">Girar Roleta</button>
+            <div id="roleta-resultado" style="margin-top:10px; font-weight:bold;"></div>
+        </section>
 
-<div style="margin: 10px 0;">
-    <label>Aposta (coins): </label>
-    <input type="number" id="crash-aposta" value="50" min="10">
-</div>
+        <!-- Crash Game -->
+        <section id="crash" class="tela" style="display:none;">
+            <h3>📈 Crash Game</h3>
 
-<button id="crash-start">Iniciar Rodada</button>
-<button id="crash-cashout" disabled>Sacar</button>
+            <div style="margin: 10px 0;">
+                <label>Aposta (coins): </label>
+                <input type="number" id="crash-aposta" value="50" min="10">
+            </div>
 
-<div id="crash-multiplicador" style="margin-top: 10px; font-size: 1.5em; font-weight:bold;">
-    Multiplicador: 1.00x
-</div>
+            <button id="crash-start">Iniciar Rodada</button>
+            <button id="crash-cashout" disabled>Sacar</button>
 
-<div id="crash-resultado" style="margin-top: 10px; font-weight:bold;"></div>
-</section>
+            <div id="crash-multiplicador" style="margin-top: 10px; font-size: 1.5em; font-weight:bold;">
+                Multiplicador: 1.00x
+            </div>
+
+            <div id="crash-resultado" style="margin-top: 10px; font-weight:bold;"></div>
+        </section>
+
+        <!-- Missões -->
         <section id="missoes" class="tela" style="display:none;">
-    <h3>🎯 Missões e Recompensas</h3>
-    <ul id="missoes-list">
-        <!-- Missões serão listadas aqui pelo JS -->
-    </ul>
-    <button id="resgatar-recompensa">Resgatar Recompensa Diária</button>
-    <div id="missoes-resultado" style="margin-top:10px; font-weight:bold;"></div>
-</section>
+            <h3>🎯 Missões e Recompensas</h3>
+            <ul id="missoes-list"></ul>
+            <button id="resgatar-recompensa">Resgatar Recompensa Diária</button>
+            <div id="missoes-resultado" style="margin-top:10px; font-weight:bold;"></div>
+        </section>
 
-        <section id="ranking" class="tela" style="display:none;"><h3>🏆 Ranking de Jogadores</h3>
-<table id="ranking-table" style="width:100%; margin-top:10px; border-collapse: collapse;">
-    <thead>
-        <tr style="background-color:#222; color:#ffd700;">
-            <th>#</th>
-            <th>Usuário</th>
-            <th>Saldo</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Jogadores serão inseridos aqui pelo JS -->
-    </tbody>
-</table>
-</section>
-        <section id="historico" class="tela" style="display:none;"><div>
-    <button data-filter="all">Todos</button>
-    <button data-filter="slot">Slot</button>
-    <button data-filter="roleta">Roleta</button>
-    <button data-filter="crash">Crash</button>
-</div>
-<ul id="historico"></ul></section>
+        <!-- Ranking -->
+        <section id="ranking" class="tela" style="display:none;">
+            <h3>🏆 Ranking de Jogadores</h3>
+            <table id="ranking-table" style="width:100%; margin-top:10px; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color:#222; color:#ffd700;">
+                        <th>#</th>
+                        <th>Usuário</th>
+                        <th>Saldo</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- Histórico -->
+        <section id="historico" class="tela" style="display:none;">
+            <div>
+                <button data-filter="all">Todos</button>
+                <button data-filter="slot">Slot</button>
+                <button data-filter="roleta">Roleta</button>
+                <button data-filter="crash">Crash</button>
+            </div>
+            <ul id="historico"></ul>
+        </section>
+
+        <!-- Chat -->
+        <section id="chat" class="tela" style="display:none;">
+            <h3>💬 Chat Público</h3>
+            <div id="chat-mensagens" style="height:200px; overflow-y:scroll; border:1px solid #555; padding:5px;"></div>
+            <input type="text" id="chat-input" placeholder="Digite sua mensagem">
+            <button id="chat-enviar">Enviar</button>
+        </section>
+
     </main>
 
+    <!-- Scripts -->
     <script src="js/ui.js" type="module"></script>
     <script type="module" src="js/slot.js"></script>
     <script type="module" src="js/roleta.js"></script>
     <script type="module" src="js/crash.js"></script>
     <script type="module" src="js/ranking.js"></script>
-<script type="module">
-    import { carregarRanking } from "./js/ranking.js";
-
-    // Carrega ranking ao abrir a aba
-    const rankingBtn = document.querySelector('aside button[data-tela="ranking"]');
-    rankingBtn.addEventListener("click", () => {
-        carregarRanking();
-    });
-</script>
+    <script type="module">
+        import { carregarRanking } from "./js/ranking.js";
+        const rankingBtn = document.querySelector('aside button[data-tela="ranking"]');
+        rankingBtn.addEventListener("click", () => {
+            carregarRanking();
+        });
+    </script>
     <script type="module" src="js/missoes.js"></script>
-<script type="module">
-    import { carregarMissoes } from "./js/missoes.js";
-
-    const missoesBtn = document.querySelector('aside button[data-tela="missoes"]');
-    missoesBtn.addEventListener("click", () => {
-        carregarMissoes();
-    });
-</script>
-    <section id="chat" class="tela" style="display:none;">
-    <h3>💬 Chat Público</h3>
-    <div id="chat-mensagens" style="height:200px; overflow-y:scroll; border:1px solid #555; padding:5px;"></div>
-    <input type="text" id="chat-input" placeholder="Digite sua mensagem">
-    <button id="chat-enviar">Enviar</button>
-</section>
-
-
-    
+    <script type="module">
+        import { carregarMissoes } from "./js/missoes.js";
+        const missoesBtn = document.querySelector('aside button[data-tela="missoes"]');
+        missoesBtn.addEventListener("click", () => {
+            carregarMissoes();
+        });
+    </script>
+    <script type="module" src="js/perfil.js"></script>
+    <script type="module" src="js/chat.js"></script>
 </body>
 </html>
