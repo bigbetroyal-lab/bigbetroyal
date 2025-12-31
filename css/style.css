@@ -150,4 +150,17 @@ main {
 #crash-start:hover, #crash-cashout:hover {
     background-color: #ff4757;
 }
+#ranking-table th, #ranking-table td {
+    border: 1px solid #555;
+    padding: 8px;
+    text-align: center;
+}
+
+#ranking-table tr:nth-child(even) {
+    background-color: rgba(255,255,255,0.05);
+}
+
+#ranking-table tr:hover {
+    background-color: rgba(255,255,255,0.1);
+}
 
