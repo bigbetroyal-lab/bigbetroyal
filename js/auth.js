@@ -1,28 +1,10 @@
 
-import { auth } from "./firebase.js";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { criarDocumentoUsuario, carregarSaldo, carregarHistorico } from "./saldo.js";
+import { db } from "./firebase.js";
+import { setDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-export function setupAuth() {
-    const btnLogout = document.getElementById("btn-logout");
-
-    onAuthStateChanged(auth, async (user) => {
-        const telas = document.querySelectorAll(".tela");
-        if (user) {
-            document.querySelector("aside").style.display = "block";
-            document.getElementById("top-saldo").style.display = "inline";
-            await carregarSaldo(user.uid);
-            await carregarHistorico(user.uid);
-        } else {
-            document.querySelector("aside").style.display = "none";
-            document.getElementById("top-saldo").style.display = "none";
-            telas.forEach(tela => tela.style.display = tela.id === "historico" ? "block" : "none");
-        }
-    });
-
-    btnLogout.addEventListener("click", async () => {
-        await signOut(auth);
+async function criarUsuario(uid, email, nickname) {
+    await setDoc(doc(db, "users", uid), {
+        saldo: 1000,
+        nickname: nickname || email.split("@")[0] // padrão
     });
 }
-
-// Registrar e login podem ser adicionados em modais ou páginas separadas
