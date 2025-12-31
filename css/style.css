@@ -120,3 +120,19 @@ main {
 .spin-btn:hover {
     background-color: #ff4757;
 }
+#roleta-spin {
+    padding: 10px 20px;
+    background-color: #ff6b6b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    transition: 0.3s;
+}
+#roleta-spin:hover {
+    background-color: #ff4757;
+}
+#numero-container input {
+    width: 60px;
+}
