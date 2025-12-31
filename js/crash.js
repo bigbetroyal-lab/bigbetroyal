@@ -13,6 +13,10 @@ let crashed = false;
 let userSaldo = 0;
 let aposta = 0;
 
+// Lembre-se de colocar isso no CSS
+// #crash-multiplicador.win { color: #0f0; transition: color 0.3s; }
+// #crash-multiplicador.lose { color: #f00; transition: color 0.3s; }
+
 crashStartBtn.addEventListener("click", async () => {
     const user = auth.currentUser;
     if(!user) return alert("Você precisa estar logado para jogar!");
@@ -30,6 +34,9 @@ crashStartBtn.addEventListener("click", async () => {
     crashCashoutBtn.disabled = false;
     crashResultadoEl.textContent = "";
 
+    // Remove classes anteriores
+    crashMultiplicadorEl.classList.remove("win", "lose");
+
     // Definir quando o crash acontece
     const crashPoint = (Math.random() * 9 + 2).toFixed(2); // entre 2x e 11x
 
@@ -43,6 +50,11 @@ crashStartBtn.addEventListener("click", async () => {
             crashed = true;
             crashCashoutBtn.disabled = true;
             crashResultadoEl.textContent = `💥 Crash! Você perdeu ${aposta} coins.`;
+
+            // Flash vermelho
+            crashMultiplicadorEl.classList.remove("win");
+            crashMultiplicadorEl.classList.add("lose");
+
             adicionarAposta(user.uid, aposta, "Perdeu Crash");
         }
     }, 50);
@@ -56,7 +68,11 @@ crashCashoutBtn.addEventListener("click", async () => {
     userSaldo += premio;
     await atualizarSaldo(user.uid, userSaldo);
     crashResultadoEl.textContent = `🎉 Você sacou a ${multiplicador}x e ganhou ${premio} coins!`;
+
+    // Flash verde
+    crashMultiplicadorEl.classList.remove("lose");
+    crashMultiplicadorEl.classList.add("win");
+
     crashCashoutBtn.disabled = true;
     await adicionarAposta(user.uid, aposta, `Ganhou Crash x${multiplicador.toFixed(2)}`);
 });
-
