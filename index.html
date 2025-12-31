@@ -68,19 +68,30 @@
             </section>
 
             <!-- Slot Machine -->
-            <section id="slot" class="tela hidden max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-                <h3 class="text-xl font-bold mb-4">🎰 Slot Machine</h3>
-                <div id="slot-reels" class="flex justify-center gap-4 mb-4">
-                    <div class="reel text-3xl">🍒</div>
-                    <div class="reel text-3xl">🍋</div>
-                    <div class="reel text-3xl">🍉</div>
+            <section id="slot" class="tela hidden max-w-3xl mx-auto bg-gray-900 p-6 rounded-xl shadow-2xl mt-6">
+                <h3 class="text-2xl font-bold text-center mb-4">🎰 Slot Machine</h3>
+            
+                <!-- Reels -->
+                <div id="slot-reels" class="flex justify-center gap-6 bg-gray-800 p-4 rounded-lg shadow-inner mb-4">
+                    <div class="reel w-24 h-24 flex items-center justify-center text-5xl bg-black rounded-lg shadow-lg">🍒</div>
+                    <div class="reel w-24 h-24 flex items-center justify-center text-5xl bg-black rounded-lg shadow-lg">🍋</div>
+                    <div class="reel w-24 h-24 flex items-center justify-center text-5xl bg-black rounded-lg shadow-lg">🍉</div>
                 </div>
+            
+                <!-- Botões de aposta -->
                 <div class="flex justify-center gap-4 mb-2">
-                    <button data-aposta="50" class="spin-btn bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition">Girar 50 coins</button>
-                    <button data-aposta="100" class="spin-btn bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition">Girar 100 coins</button>
+                    <button data-aposta="50" class="spin-btn bg-yellow-500 text-black px-6 py-3 rounded-full font-bold hover:bg-yellow-400 transition transform hover:scale-105">
+                        Girar 50 coins
+                    </button>
+                    <button data-aposta="100" class="spin-btn bg-yellow-500 text-black px-6 py-3 rounded-full font-bold hover:bg-yellow-400 transition transform hover:scale-105">
+                        Girar 100 coins
+                    </button>
                 </div>
-                <div id="slot-resultado" class="text-center mt-2 font-bold"></div>
+            
+                <!-- Resultado -->
+                <div id="slot-resultado" class="text-center mt-4 text-xl font-bold h-6"></div>
             </section>
+
 
             <!-- Roleta -->
             <section id="roleta" class="tela hidden max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
